@@ -7,18 +7,19 @@ interface GetMoviesOptions {
 }
 
 export class MoviesService {
-	defaultPage = 1;
-	defaultPerPage = 10;
-	graphqlService: GraphQLService;
+	#defaultPage = 1;
+	#defaultPerPage = 10;
+
+	#graphqlService: GraphQLService;
 
 	constructor(graphqlService: GraphQLService) {
-		this.graphqlService = graphqlService;
+		this.#graphqlService = graphqlService;
 	}
 
 	getPaginatedMovies(options?: GetMoviesOptions) {
-		const { page = this.defaultPage, perPage = this.defaultPerPage } = options ?? {};
+		const { page = this.#defaultPage, perPage = this.#defaultPerPage } = options ?? {};
 
-		return graphqlService.query({
+		return this.#graphqlService.query({
 			query: gql`
 			query Movies($pagination: PaginationInput) {
 				movies(pagination: $pagination) {
