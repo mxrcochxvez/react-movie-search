@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 import { graphqlService, type GraphQLService } from "./graphql.service";
+import { Movie, MoviesQueryResponse } from "./movies.types";
 
 interface GetMoviesOptions {
 	page?: number
@@ -16,10 +17,10 @@ export class MoviesService {
 		this.#graphqlService = graphqlService;
 	}
 
-	getPaginatedMovies(options?: GetMoviesOptions) {
+	getPaginatedMovies(options?: GetMoviesOptions): Promise<Movie[]> {
 		const { page = this.#defaultPage, perPage = this.#defaultPerPage } = options ?? {};
 
-		return this.#graphqlService.query({
+		return this.#graphqlService.query<MoviesQueryResponse>({
 			query: gql`
 			query Movies($pagination: PaginationInput) {
 				movies(pagination: $pagination) {
@@ -47,6 +48,10 @@ export class MoviesService {
 			variables: {
 				pagination: { page, perPage },
 			},
+		}).then((response) => {
+			const { data } = response;
+
+			return data?.movies.nodes ?? [];
 		});
 	}
 }
