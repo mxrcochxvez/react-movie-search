@@ -32,6 +32,45 @@ export class MoviesService {
 
 		return data?.movies.nodes ?? [];
 	}
+
+	async searchMovies(term: string): Promise<Movie[]> {
+		const allMovies = await this.getAllMovies();
+
+		if (!term.trim()) return allMovies;
+
+		const lowerCaseTerm = term.toLowerCase();
+
+		return allMovies.filter((movie) => {
+			const matchesTitle = movie.title.toLowerCase().includes(lowerCaseTerm);
+
+			const matchesSummary =
+				movie.summary?.toLowerCase().includes(lowerCaseTerm) ?? false;
+
+			const matchesDirectors =
+				movie.directors?.some((director) =>
+					director.toLowerCase().includes(lowerCaseTerm)
+				) ?? false;
+
+			const matchesActors =
+				movie.mainActors?.some((actor) =>
+					actor.toLowerCase().includes(lowerCaseTerm)
+				) ?? false;
+
+			const matchesGenres =
+				movie.genres?.some(
+					(genre) => genre?.title?.toLowerCase().includes(lowerCaseTerm) ?? false
+				) ?? false;
+
+			return (
+				matchesTitle ||
+				matchesSummary ||
+				matchesDirectors ||
+				matchesActors ||
+				matchesGenres
+			);
+		});
+	}
+
 }
 
 export const moviesService = new MoviesService(graphqlService);
