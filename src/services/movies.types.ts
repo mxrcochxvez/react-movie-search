@@ -7,17 +7,14 @@ export interface Genre {
 export interface Movie {
 	id: string;
 	title: string;
-	posterUrl: string;
-	summary: string;
-	duration: number;
-	directors: string[];
-	mainActors: string[];
-	datePublished: string;
-	rating: string;
-	ratingValue: number;
-	bestRating: number;
-	worstRating: number;
-	writers: string[];
+	posterUrl?: string | null;
+	summary?: string | null;
+	duration?: number | null;
+	directors?: string[] | null;
+	mainActors?: string[] | null;
+	datePublished?: string | null;
+	ratingValue?: number | null;
+	bestRating?: number | null;
 	genres: Genre[];
 }
 
