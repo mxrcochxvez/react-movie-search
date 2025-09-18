@@ -2,14 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
 	const [search, setSearch] = useState("");
+	const router = useRouter();
 
 	const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		alert(`Searching for: ${search}`);
+		const params = new URLSearchParams(window.location.search);
+		params.set("search", search);
+
+		router.push(`/?${params.toString()}`);
 	};
 
 	return (
