@@ -11,12 +11,19 @@ export default function MovieCard({ movie }: { movie: Movie }) {
 					src={movie.posterUrl || "/placeholder.jpg"}
 					alt={movie.title}
 					fill
+					sizes="
+					(max-width: 640px) 100vw,
+					(max-width: 1024px) 50vw,
+					(max-width: 1280px) 33vw,
+					20vw"
 					className="object-cover group-hover:opacity-60 transition-opacity"
 				/>
+
 			</div>
 
 			<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/95 via-black/80 to-black/40 p-4">
 				<h2 className="text-xl font-bold drop-shadow-md">{movie.title}</h2>
+
 				{movie.summary && (
 					<p className="text-sm text-gray-100 line-clamp-2">{movie.summary}</p>
 				)}
