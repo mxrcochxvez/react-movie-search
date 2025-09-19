@@ -22,10 +22,17 @@
 				"name": "next"
 			}
 		],
+		"baseUrl": "./",
 		"paths": {
 			"@/*": [
 				"./*"
-			]
+			],
+			"@movies/*": [
+				"src/movies/*"
+			],
+			"@shared/*": [
+				"src/shared/*"
+			],
 		}
 	},
 	"include": [

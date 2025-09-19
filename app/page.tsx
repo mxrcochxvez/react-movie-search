@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { moviesService } from '@/src/services/movies.service';
-import Pagination from '../src/components/pagination';
-import GenreFilter from '../src/components/genre-filter-buttons';
-import MovieGrid from '../src/components/movie-grid';
+import { moviesService } from '@movies/services/movies.service';
+import Pagination from '@shared/components/pagination';
+import GenreFilter from '@shared/components/genre-filter-buttons';
+import MovieGrid from '@movies/components/movie-grid';
 
 const buttonStyles = 'px-4 py-2 rounded-md bg-gray-800 text-white hover:bg-gray-700 transition-colors';
 

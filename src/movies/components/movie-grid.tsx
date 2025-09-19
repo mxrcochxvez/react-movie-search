@@ -1,5 +1,5 @@
 import MovieCard from './movie-card';
-import { Movie } from '@/src/services/movies.types';
+import { Movie } from '@/src/movies/services/movies.types';
 
 export default function MovieGrid({ movies }: { movies: Movie[] }) {
 	return (

@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const MOVIE_FIELDS = gql`
 	fragment MovieFields on Movie {
