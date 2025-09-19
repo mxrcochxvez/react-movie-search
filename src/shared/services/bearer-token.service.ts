@@ -1,4 +1,4 @@
-export interface BearerTokenResponse {
+interface BearerTokenResponse {
 	token: string;
 }
 
