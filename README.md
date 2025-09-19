@@ -1,4 +1,5 @@
 # React Movie Search
+This project is deployed using [Netlify](https://netlify.com/) @ [React Movie Search](https://marco-react-movies-search.netlify.app/).
 
 ## Running the Project
 
