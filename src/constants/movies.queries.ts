@@ -16,8 +16,8 @@ export const MOVIE_FIELDS = gql`
 		worstRating
 		writers
 		genres {
-		id
-		title
+			id
+			title
 		}
 	}
 `;
@@ -36,6 +36,8 @@ export const GENRES_QUERY = gql`
 			}
 		}
 	}
+
+	${GENRE_FIELDS}
 `;
 
 export const MOVIES_QUERY = gql`
