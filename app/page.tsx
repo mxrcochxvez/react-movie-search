@@ -32,11 +32,11 @@ export default async function Home({ searchParams }: { searchParams: Promise<Sea
 
 	return (
 		<div className="p-4">
-			{(isSearching || genre) && (
+			{(isSearching || genre) &&
 				<Link href="/" className={`${buttonStyles} inline-block my-5`}>
 					Go Back
 				</Link>
-			)}
+			}
 
 			<h1 className="text-2xl font-bold mb-4">
 				{isSearching
@@ -48,16 +48,22 @@ export default async function Home({ searchParams }: { searchParams: Promise<Sea
 
 			{isSearching && <GenreFilter genres={genres} activeGenre={genre} query={query} />}
 
-			<Pagination currentPage={currentPage} total={total} buttonStyles={buttonStyles} />
+			<Pagination
+				currentPage={currentPage}
+				total={movies.length}
+				perPageCount={10}
+				buttonStyles={buttonStyles}
+				search={query}
+				genre={genre}
+			/>
 
-			{hasResults ? (
-				<MovieGrid movies={movies} />
-			) : (
+			{hasResults ?
+				<MovieGrid movies={movies} /> :
 				<p>
 					No movies found
 					{isSearching ? ` for '${query}'` : genre ? ` in '${genre}'` : ""}.
 				</p>
-			)}
+			}
 		</div>
 	);
 }
