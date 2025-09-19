@@ -5,12 +5,13 @@ import MovieCard from "@/src/components/movie-card";
 const buttonStyles = "px-4 py-2 rounded-md bg-gray-800 text-white hover:bg-gray-700 transition-colors";
 
 export default async function Home({ searchParams }: { searchParams: { search?: string; page?: string } }) {
-	const query = await searchParams.search ?? "";
-	const page = await Number(searchParams.page ?? "1");
+	const { search, page } = await searchParams;
+	const query = search ?? "";
+	const currentPage = Number(page ?? "1");
 
 	const movies = query
 		? await moviesService.searchMovies(query)
-		: await moviesService.getPaginatedMovies({ page, perPage: 10 });
+		: await moviesService.getPaginatedMovies({ page: currentPage, perPage: 10 });
 
 	const total = movies.length ?? 0;
 
@@ -24,8 +25,8 @@ export default async function Home({ searchParams }: { searchParams: { search?: 
 
 			{!query && (
 				<div className="flex items-center justify-between my-10">
-					{page > 1 ? (
-						<Link href={`/?page=${page - 1}`} className={buttonStyles}>
+					{currentPage > 1 ? (
+						<Link href={`/?page=${currentPage - 1}`} className={buttonStyles}>
 							Previous
 						</Link>
 					) : (
@@ -33,10 +34,10 @@ export default async function Home({ searchParams }: { searchParams: { search?: 
 					)}
 
 					<span className="px-4 py-2 bg-gray-100 rounded-md text-gray-700 font-medium shadow-sm">
-						Page {page} - Total Results = {total}
+						Page {currentPage} - Total Results = {total}
 					</span>
 
-					<Link href={`/?page=${page + 1}`} className={buttonStyles}>
+					<Link href={`/?page=${currentPage + 1}`} className={buttonStyles}>
 						Next
 					</Link>
 				</div>
