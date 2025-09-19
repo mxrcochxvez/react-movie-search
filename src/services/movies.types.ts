@@ -1,7 +1,5 @@
 export interface Genre {
-	id: string;
-	title?: string;
-	movies: Movie[];
+	title: string;
 }
 
 export interface Movie {
@@ -22,4 +20,10 @@ export interface MoviesQueryResponse {
 	movies: {
 		nodes: Movie[];
 	};
+}
+
+export interface GenresQueryResponse {
+	genres: {
+		nodes: Genre[];
+	}
 }

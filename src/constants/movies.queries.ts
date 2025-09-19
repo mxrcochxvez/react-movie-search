@@ -22,6 +22,22 @@ export const MOVIE_FIELDS = gql`
 	}
 `;
 
+export const GENRE_FIELDS = gql`
+	fragment GenreFields on Genre {
+		title
+	}
+`;
+
+export const GENRES_QUERY = gql`
+	query Genres {
+		genres {
+			nodes {
+				...GenreFields
+			}
+		}
+	}
+`;
+
 export const MOVIES_QUERY = gql`
 	query Movies($pagination: PaginationInput) {
 		movies(pagination: $pagination) {

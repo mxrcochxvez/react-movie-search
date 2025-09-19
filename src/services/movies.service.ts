@@ -1,6 +1,6 @@
 import { graphqlService, type GraphQLService } from "./graphql.service";
-import { Movie, MoviesQueryResponse } from "./movies.types";
-import { MOVIES_QUERY, ALL_MOVIES_QUERY } from "../constants/movies.queries";
+import { GenresQueryResponse, Movie, MoviesQueryResponse } from "./movies.types";
+import { MOVIES_QUERY, ALL_MOVIES_QUERY, GENRES_QUERY } from "../constants/movies.queries";
 
 interface GetMoviesOptions {
 	page?: number;
@@ -14,6 +14,18 @@ export class MoviesService {
 
 	constructor(graphqlService: GraphQLService) {
 		this.#graphqlService = graphqlService;
+	}
+
+	async getMovieGenres(): Promise<string[]> {
+		const { data } = await this.#graphqlService.query<GenresQueryResponse>({
+			query: GENRES_QUERY
+		});
+
+		if (!data) return [];
+
+		const genres = data.genres.nodes;
+
+		return genres.map(genre => genre.title);
 	}
 
 	async getPaginatedMovies(options?: GetMoviesOptions): Promise<Movie[]> {
