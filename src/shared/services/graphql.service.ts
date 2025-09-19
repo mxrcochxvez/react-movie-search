@@ -1,13 +1,11 @@
-import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
-import { bearerTokenService } from './bearer-token.service';
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
+import { bearerTokenService } from "./bearer-token.service";
 
-const URI = 'https://0kadddxyh3.execute-api.us-east-1.amazonaws.com/graphql';
+const URI = "https://0kadddxyh3.execute-api.us-east-1.amazonaws.com/graphql";
 
 export class GraphQLService {
-	bearerToken: string;
-	client: ApolloClient;
-	query: ApolloClient['query'];
-	mutate: ApolloClient['mutate'];
+	private bearerToken: string;
+	private client: ApolloClient;
 
 	constructor(bearerToken: string, uri: string) {
 		this.bearerToken = bearerToken;
@@ -21,9 +19,39 @@ export class GraphQLService {
 			}),
 			cache: new InMemoryCache(),
 		});
+	}
 
-		this.query = this.client.query.bind(this.client);
-		this.mutate = this.client.mutate.bind(this.client);
+	async query<T>(options: ApolloClient.QueryOptions) {
+		try {
+			return await this.client.query<T>(options);
+		} catch (err: any) {
+			if (this.isUnauthorizedError(err)) {
+				this.bearerToken = await bearerTokenService.getBearerToken();
+				this.resetClient();
+
+				return this.client.query<T>(options);
+			}
+			throw err;
+		}
+	}
+
+	private isUnauthorizedError(err: any): boolean {
+		return (
+			err?.networkError?.statusCode === 401 ||
+			err?.message?.toLowerCase().includes("unauthorized")
+		);
+	}
+
+	private resetClient() {
+		this.client = new ApolloClient({
+			link: new HttpLink({
+				uri: URI,
+				headers: {
+					Authorization: `Bearer ${this.bearerToken}`,
+				},
+			}),
+			cache: new InMemoryCache(),
+		});
 	}
 }
 
