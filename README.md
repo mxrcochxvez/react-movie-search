@@ -29,15 +29,27 @@ mock, or replace in tests without rewriting client code. This helps ensure the a
 and gave me more precise control over the data being fetched. An added benefit was that it allowed me to bypass some of the automatic caching behaviors of
 Next.js's [`fetch` API](https://nextjs.org/docs/app/api-reference/functions/fetch), making my data flow more predictable.
 
-## What I struggled with & learned
+## What I Struggled With & Learned
 I struggled with preserving query parameters across pagination and filtering. Initially, navigating to the next page would clear the search or genre filters.
-Debugging this taught me how to properly use `URLSearchParams` in Next.js to carry state through the URL. This was a simple but important lesson in building stateful websites with the App Router.
+Debugging this taught me how to properly use `URLSearchParams` in Next.js to carry state through the URL. This was a simple but important lesson in building
+stateful websites with the App Router.
 
-I also didn't know I needed to update the Next.js config for CDN images. At first, images from external sources (like Amazon's CDN) would fail because their hostnames weren't
-whitelisted. Fixing this in `next.config.js` was a good reminder that frameworks often enforce some defaults for app security, and you need to explicitly configure them for real-world APIs.
+I also didn't know I needed to update the Next.js config for CDN images. At first, images from external sources (like Amazon's CDN) would fail because their
+hostnames weren't whitelisted. Fixing this in `next.config.js` was a good reminder that frameworks often enforce some defaults for app security, and you need
+to explicitly configure them for real-world APIs.
 
-Lastly realizing that in Next.js App Router, `searchParams` is async and needs to be `await`ed. It's such a small detail and only resulted in console warnings, but it tripped me up until I
-dug deeper into the docs. It reminded me how important it is to slow down and read the framework-specific differences when jumping into new patterns.
+Another big challenge was **handling expired bearer tokens**. Initially, when the API returned `Unauthorized`, my Apollo client would simply fail. I spent a
+lot of time experimenting with Apollo's link chain, trying to use `HttpLink` and `ApolloLink` directly to intercept errors and retry. Eventually I got a working
+solution where the client resets itself, fetches a new bearer token, and retries the request. It was tricky because I had to test the failure path repeatedly,
+but I came away with a deeper understanding of how Apollo's request lifecycle works and how to extend it.
+
+This also led me to realize there are **built-in retry mechanisms** in Apollo like `RetryLink` and `onError`. My solution works, but it's more low-level and verbose
+than it needs to be. If I were continuing this project, I'd refactor to use those built-ins, which would make the retry flow cleaner, reduce boilerplate, and allow
+me to expand retries beyond just authorization failures (e.g., network timeouts or 500 errors).
+
+Lastly, realizing that in Next.js App Router, `searchParams` is async and needs to be `await`ed was another trip-up. It's such a small detail and only resulted in
+console warnings, but it reminded me how important it is to slow down and read framework-specific differences when adopting new patterns.
+
 
 ## Project Structure
 
@@ -91,7 +103,10 @@ This helps developers understand that there is __shared__ logic/visuals that wou
 
 ## Next Improvements
 
-- **Better auth handling**: Right now, bearer token fetching is done at server initialization. I'd want to add a retry/refresh mechanism so the app never breaks if the token expires.
+- **Use of GraphQL's Built-in Retry Methods**: Right now, my retry logic is custom so I am manually refreshing the bearer token and re-running the query once if an `Unauthorized` error occurs.
+It works, but it's fairly low-level and puts a lot of responsibility on the service layer. A next step would be to leverage Apollo's built-in link ecosystem more effectively, such as `onError` or `RetryLink`,
+which provide a cleaner and more declarative way to handle retries, backoff strategies, and token refresh. This would reduce boilerplate, make the retry flow easier to configure, and allow me to expand retries
+to other network errors (e.g., timeouts, 500s) in a standardized way.
 - **Improved pagination**: Right now, the total count is inferred from the length of the returned nodes. Ideally, I'd fetch the total count from the API to display “Page X of Y.”
 - **UI polish**: Add skeleton loaders and error states for a smoother user experience.
 - **Testing**: Introduce unit tests for services and integration tests for search + filter workflows.
