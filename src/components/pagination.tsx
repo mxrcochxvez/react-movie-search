@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 interface PaginationProps {
 	currentPage: number;
@@ -8,7 +8,7 @@ interface PaginationProps {
 
 export default function Pagination({ currentPage, total, buttonStyles }: PaginationProps) {
 	return (
-		<div className="flex items-center justify-between my-10">
+		<div className='flex items-center justify-between my-10'>
 			{currentPage > 1 ? (
 				<Link href={`/?page=${currentPage - 1}`} className={buttonStyles}>
 					Previous
@@ -17,7 +17,7 @@ export default function Pagination({ currentPage, total, buttonStyles }: Paginat
 				<div />
 			)}
 
-			<span className="px-4 py-2 bg-gray-100 rounded-md text-gray-700 font-medium shadow-sm">
+			<span className='px-4 py-2 bg-gray-100 rounded-md text-gray-700 font-medium shadow-sm'>
 				Page {currentPage} - Total Results = {total}
 			</span>
 

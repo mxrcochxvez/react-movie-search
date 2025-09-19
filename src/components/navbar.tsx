@@ -1,42 +1,42 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
-	const [search, setSearch] = useState("");
+	const [search, setSearch] = useState('');
 	const router = useRouter();
 
 	const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		const params = new URLSearchParams(window.location.search);
-		params.set("search", search);
+		params.set('search', search);
 
 		router.push(`/?${params.toString()}`);
 	};
 
 	return (
-		<nav className="bg-black text-white shadow-md px-6 py-4 flex items-center justify-between">
-			<Link href="/" className="text-xl font-bold">
+		<nav className='bg-black text-white shadow-md px-6 py-4 flex items-center justify-between'>
+			<Link href='/' className='text-xl font-bold'>
 				React Movie Search
 			</Link>
 
 			<form
 				onSubmit={handleSearch}
-				className="flex items-center border rounded-lg overflow-hidden"
+				className='flex items-center border rounded-lg overflow-hidden'
 			>
 				<input
-					type="text"
+					type='text'
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
-					placeholder="Search..."
-					className="px-3 py-2 outline-none w-40 sm:w-64"
+					placeholder='Search...'
+					className='px-3 py-2 outline-none w-40 sm:w-64'
 				/>
 				<button
-					type="submit"
-					className="bg-white text-black px-4 py-2 hover:bg-gray-200"
+					type='submit'
+					className='bg-white text-black px-4 py-2 hover:bg-gray-200'
 				>
 					Search
 				</button>
