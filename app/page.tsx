@@ -26,24 +26,25 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
 	}
 
 	const total = movies.length ?? 0;
+	const isSearching = Boolean(query);
 
 	return (
 		<div className="p-4">
-			{(query || genre) && (
+			{(isSearching || genre) && (
 				<Link href="/" className={`${buttonStyles} inline-block my-5`}>
 					Go Back
 				</Link>
 			)}
 
 			<h1 className="text-2xl font-bold mb-4">
-				{query
+				{isSearching
 					? `Showing ${total} results for "${query}"`
 					: genre
 						? `Showing ${total} ${genre} movies`
 						: "Movies"}
 			</h1>
 
-			{query && (
+			{isSearching && (
 				<div className="flex flex-wrap gap-2 mb-6">
 					{genres.map((currentGenre) => {
 						const params = new URLSearchParams();
@@ -66,7 +67,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
 				</div>
 			)}
 
-			{!query && !genre && (
+			{!isSearching && !genre && (
 				<div className="flex items-center justify-between my-10">
 					{currentPage > 1 ? (
 						<Link href={`/?page=${currentPage - 1}`} className={buttonStyles}>
@@ -95,7 +96,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
 			) : (
 				<p>
 					No movies found
-					{query ? ` for "${query}"` : genre ? ` in "${genre}"` : ""}.
+					{isSearching ? ` for "${query}"` : genre ? ` in "${genre}"` : ""}.
 				</p>
 			)}
 		</div>
