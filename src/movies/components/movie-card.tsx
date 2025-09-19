@@ -59,7 +59,7 @@ export default function MovieCard({ movie }: { movie: Movie }) {
 						{Array.isArray(movie.mainActors) && movie.mainActors.length > 0 && (
 							<p>
 								<span className="font-semibold">Stars:</span>{' '}
-								{movie.mainActors.slice(0, 3).join(', ')}
+								{movie.mainActors.join(', ')}
 							</p>
 						)}
 						{movie.genres?.length > 0 && (
