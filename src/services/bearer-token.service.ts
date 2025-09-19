@@ -2,11 +2,17 @@ export interface BearerTokenResponse {
 	token: string;
 }
 
+const endpoint = 'https://0kadddxyh3.execute-api.us-east-1.amazonaws.com/auth/token';
+
 export class BearerTokenService {
-	private readonly endpoint = 'https://0kadddxyh3.execute-api.us-east-1.amazonaws.com/auth/token';
+	#endpoint: string;
+
+	constructor(endpoint: string) {
+		this.#endpoint = endpoint;
+	}
 
 	async getBearerToken(): Promise<string> {
-		const response = await fetch(this.endpoint);
+		const response = await fetch(this.#endpoint);
 
 		if (!response.ok) {
 			throw new Error(
@@ -24,4 +30,4 @@ export class BearerTokenService {
 	}
 }
 
-export const bearerTokenService = new BearerTokenService();
+export const bearerTokenService = new BearerTokenService(endpoint);
