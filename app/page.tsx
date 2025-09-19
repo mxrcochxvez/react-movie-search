@@ -1,13 +1,21 @@
-import Link from "next/link";
-import { moviesService } from "@/src/services/movies.service";
-import MovieCard from "@/src/components/movie-card";
+import Link from 'next/link';
+import { moviesService } from '@/src/services/movies.service';
+import Pagination from '../src/components/pagination';
+import GenreFilter from '../src/components/genre-filter-buttons';
+import MovieGrid from '../src/components/movie-grid';
 
-const buttonStyles = "px-4 py-2 rounded-md bg-gray-800 text-white hover:bg-gray-700 transition-colors";
+const buttonStyles = 'px-4 py-2 rounded-md bg-gray-800 text-white hover:bg-gray-700 transition-colors';
 
-export default async function Home({ searchParams }: { searchParams: Promise<{ search?: string; page?: string; genre?: string }> }) {
+interface SearchParams {
+	search?: string;
+	page?: string;
+	genre?: string;
+}
+
+export default async function Home({ searchParams }: { searchParams: Promise<SearchParams> }) {
 	const { search, page, genre } = await searchParams;
-	const query = search ?? "";
-	const currentPage = Number(page ?? "1");
+	const query = search ?? '';
+	const currentPage = Number(page ?? '1');
 
 	const genres = await moviesService.getMovieGenres();
 
@@ -26,79 +34,48 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
 	}
 
 	const total = movies.length ?? 0;
+
 	const isSearching = Boolean(query);
+	const isFilteringByGenre = isSearching && Boolean(genre);
+	const isPaginating = !isSearching && !genre;
+	const hasResults = movies.length > 0;
 
 	return (
-		<div className="p-4">
-			{(isSearching || genre) && (
-				<Link href="/" className={`${buttonStyles} inline-block my-5`}>
+		<div className='p-4'>
+			{(isSearching || genre) &&
+				<Link href='/' className={`${buttonStyles} inline-block my-5`}>
 					Go Back
 				</Link>
-			)}
+			}
 
-			<h1 className="text-2xl font-bold mb-4">
+			<h1 className='text-2xl font-bold mb-4'>
 				{isSearching
-					? `Showing ${total} results for "${query}"`
-					: genre
+					? `Showing ${total} results for '${query}'`
+					: isFilteringByGenre
 						? `Showing ${total} ${genre} movies`
-						: "Movies"}
+						: 'Movies'}
 			</h1>
 
-			{isSearching && (
-				<div className="flex flex-wrap gap-2 mb-6">
-					{genres.map((currentGenre) => {
-						const params = new URLSearchParams();
-						params.set("search", query);
-						params.set("genre", currentGenre);
+			{isSearching &&
+				<GenreFilter genres={genres} activeGenre={genre} query={query} />
+			}
 
-						return (
-							<Link
-								key={currentGenre}
-								href={`/?${params.toString()}`}
-								className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${currentGenre === genre
-									? "bg-indigo-600 text-white"
-									: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-									}`}
-							>
-								{currentGenre}
-							</Link>
-						);
-					})}
-				</div>
-			)}
+			{isPaginating &&
+				<Pagination
+					currentPage={currentPage}
+					total={total}
+					buttonStyles={buttonStyles}
+				/>
+			}
 
-			{!isSearching && !genre && (
-				<div className="flex items-center justify-between my-10">
-					{currentPage > 1 ? (
-						<Link href={`/?page=${currentPage - 1}`} className={buttonStyles}>
-							Previous
-						</Link>
-					) : (
-						<div />
-					)}
-
-					<span className="px-4 py-2 bg-gray-100 rounded-md text-gray-700 font-medium shadow-sm">
-						Page {currentPage} - Total Results = {total}
-					</span>
-
-					<Link href={`/?page=${currentPage + 1}`} className={buttonStyles}>
-						Next
-					</Link>
-				</div>
-			)}
-
-			{movies.length > 0 ? (
-				<div className="grid gap-6 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-					{movies.map((movie) => (
-						<MovieCard key={movie.id} movie={movie} />
-					))}
-				</div>
-			) : (
+			{hasResults ?
+				<MovieGrid movies={movies} />
+				:
 				<p>
 					No movies found
-					{isSearching ? ` for "${query}"` : genre ? ` in "${genre}"` : ""}.
+					{isSearching ? ` for '${query}'` : genre ? ` in '${genre}'` : ''}.
 				</p>
-			)}
+			}
 		</div>
 	);
 }
