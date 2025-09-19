@@ -7,7 +7,7 @@ export interface Movie {
 	title: string;
 	posterUrl?: string | null;
 	summary?: string | null;
-	duration?: number | null;
+	duration?: string | null;
 	directors?: string[] | null;
 	mainActors?: string[] | null;
 	datePublished?: string | null;
