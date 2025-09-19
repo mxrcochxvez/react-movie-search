@@ -1,6 +1,6 @@
 import { graphqlService, type GraphQLService } from '@shared/services/graphql.service';
-import { GenresQueryResponse, Movie, MoviesQueryResponse } from './movies.types';
-import { MOVIES_QUERY, ALL_MOVIES_QUERY, GENRES_QUERY } from './movies.queries';
+import { GenresQueryResponse, Movie, MoviesQueryResponse } from '../types/movies.types';
+import { MOVIES_QUERY, ALL_MOVIES_QUERY, GENRES_QUERY } from '../queries/movies.queries';
 
 interface GetMoviesOptions {
 	page?: number;

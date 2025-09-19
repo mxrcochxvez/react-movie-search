@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Movie } from '../services/movies.types';
+import { Movie } from '../types/movies.types';
 
 export default function MovieCard({ movie }: { movie: Movie }) {
 	return (
