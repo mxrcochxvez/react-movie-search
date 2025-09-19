@@ -28,6 +28,19 @@ export class MoviesService {
 		return genres.map(genre => genre.title);
 	}
 
+	async filterMoviesByGenre(genre: string, movies: Movie[]): Promise<Movie[]> {
+		if (!genre.trim()) return movies;
+
+		const lowerCaseGenre = genre.toLowerCase();
+
+		return movies.filter((movie) =>
+			movie.genres?.some(
+				(g) => g?.title?.toLowerCase() === lowerCaseGenre
+			)
+		);
+	}
+
+
 	async getPaginatedMovies(options?: GetMoviesOptions): Promise<Movie[]> {
 		const { page = this.#defaultPage, perPage = this.#defaultPerPage } = options ?? {};
 
