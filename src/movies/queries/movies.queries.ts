@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const MOVIE_FIELDS = gql`
 	fragment MovieFields on Movie {
@@ -22,44 +22,24 @@ export const MOVIE_FIELDS = gql`
 	}
 `;
 
-export const GENRE_FIELDS = gql`
-	fragment GenreFields on Genre {
-		title
+export const MOVIES_QUERY = gql`
+	query Movies($pagination: PaginationInput, $where: MovieFilterInput) {
+		movies(pagination: $pagination, where: $where) {
+			nodes {
+				...MovieFields
+			}
+		}
 	}
+
+	${MOVIE_FIELDS}
 `;
 
 export const GENRES_QUERY = gql`
 	query Genres {
 		genres {
 			nodes {
-				...GenreFields
+				title
 			}
 		}
 	}
-
-	${GENRE_FIELDS}
-`;
-
-export const MOVIES_QUERY = gql`
-	query Movies($pagination: PaginationInput) {
-		movies(pagination: $pagination) {
-			nodes {
-				...MovieFields
-			}
-		}
-	}
-
-	${MOVIE_FIELDS}
-`;
-
-export const ALL_MOVIES_QUERY = gql`
-	query AllMovies {
-		movies {
-			nodes {
-				...MovieFields
-			}
-		}
-	}
-
-	${MOVIE_FIELDS}
 `;
