@@ -26,7 +26,8 @@ This project is deployed using [Netlify](https://netlify.com/) @ [React Movie Se
 - **Testability with Singletons**: I used the singleton pattern for service classes (e.g. `MoviesService`, `GraphQLService`), which makes them easy to inject,
 mock, or replace in tests without rewriting client code. This helps ensure the architecture is both maintainable and test-friendly as the project grows.
 - **Choosing GraphQL over REST**: I opted for the GraphQL API because it is more type-explicit and pairs well with TypeScript. It also scales well, is fast,
-and gave me more precise control over the data being fetched. An added benefit was that it allowed me to bypass some of the automatic caching behaviors of Next.js's `fetch` API, making my data flow more predictable.
+and gave me more precise control over the data being fetched. An added benefit was that it allowed me to bypass some of the automatic caching behaviors of
+Next.js's [`fetch` API](https://nextjs.org/docs/app/api-reference/functions/fetch), making my data flow more predictable.
 
 ## What I struggled with & learned
 I struggled with preserving query parameters across pagination and filtering. Initially, navigating to the next page would clear the search or genre filters.
