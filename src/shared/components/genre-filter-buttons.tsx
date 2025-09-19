@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 interface GenreFilterProps {
 	genres: string[];
-	activeGenre?: string;
+	activeGenre?: string | null;
 	query: string;
 }
 
@@ -27,6 +27,15 @@ export default function GenreFilter({ genres, activeGenre, query }: GenreFilterP
 					</Link>
 				);
 			})}
+
+			{activeGenre &&
+				<Link
+					href={`/?search=${encodeURIComponent(query)}`}
+					className='px-3 py-1 rounded-full text-sm font-medium bg-red-500 text-white hover:bg-red-600 transition-colors'
+				>
+					Clear Genre
+				</Link>
+			}
 		</div>
 	);
 }
