@@ -1,5 +1,7 @@
-import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
-import { bearerTokenService } from "./bearer-token.service";
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
+import { bearerTokenService } from './bearer-token.service';
+
+const URI = 'https://0kadddxyh3.execute-api.us-east-1.amazonaws.com/graphql';
 
 export class GraphQLService {
 	bearerToken: string;
@@ -7,12 +9,12 @@ export class GraphQLService {
 	query: ApolloClient['query'];
 	mutate: ApolloClient['mutate'];
 
-	constructor(bearerToken: string) {
+	constructor(bearerToken: string, uri: string) {
 		this.bearerToken = bearerToken;
 
 		this.client = new ApolloClient({
 			link: new HttpLink({
-				uri: "https://0kadddxyh3.execute-api.us-east-1.amazonaws.com/graphql",
+				uri,
 				headers: {
 					Authorization: `Bearer ${bearerToken}`,
 				},
@@ -26,4 +28,4 @@ export class GraphQLService {
 }
 
 const bearerToken = await bearerTokenService.getBearerToken();
-export const graphqlService = new GraphQLService(bearerToken);
+export const graphqlService = new GraphQLService(bearerToken, URI);
